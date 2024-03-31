@@ -4,6 +4,43 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Multiplication Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f0f0;
+    }
+    #quiz {
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    h2 {
+      text-align: center;
+    }
+    button {
+      display: block;
+      margin: 10px auto;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+    #question-page, #result-page {
+      display: none;
+    }
+  </style>
 </head>
 <body>
 
@@ -14,15 +51,16 @@
     <button onclick="startQuiz()">Start Quiz</button>
   </div>
 
-  <div id="question-page" style="display: none;">
-    <div id="question"></div>
+  <div id="question-page">
+    <h2 id="question"></h2>
     <input type="number" id="answer" placeholder="Enter your answer" inputmode="numeric">
     <button onclick="submitAnswer()">Submit Answer</button>
   </div>
 
-  <div id="result-page" style="display: none;">
+  <div id="result-page">
     <h2>Your Score:</h2>
     <div id="score"></div>
+    <div id="time"></div>
   </div>
 </div>
 
@@ -30,18 +68,20 @@
   // Define multiplication questions and answers
   const questions = [];
   for (let i = 2; i <= 9; i++) {
-    for (let j = 2; j <= 9; j++) {
-      questions.push({ question: `${i} X  ${j} = `, answer: i * j });
+    for (let j = 1; j <= 10; j++) {
+      questions.push({ question: `What is ${i} times ${j}?`, answer: i * j });
     }
   }
 
-  // Randomize questions order
-  shuffle(questions);
+  // Shuffle the questions array
+  shuffleArray(questions);
 
   let currentQuestion = 0;
   let score = 0;
+  let startTime, endTime;
 
   function startQuiz() {
+    startTime = new Date().getTime();
     document.getElementById('start-page').style.display = 'none';
     loadQuestion();
   }
@@ -70,13 +110,18 @@
   }
 
   function showResult() {
+    endTime = new Date().getTime();
+    const timeTaken = (endTime - startTime) / 1000;
+    const minutes = Math.floor(timeTaken / 60);
+    const seconds = Math.floor(timeTaken % 60);
     document.getElementById('question-page').style.display = 'none';
     document.getElementById('result-page').style.display = 'block';
-    document.getElementById('score').innerText = `${score} out of ${questions.length}`;
+    document.getElementById('score').innerText = `Score: ${score} out of ${questions.length}`;
+    document.getElementById('time').innerText = `Time taken: ${minutes} minutes ${seconds} seconds`;
   }
 
-  // Function to shuffle array elements (Fisher-Yates shuffle algorithm)
-  function shuffle(array) {
+  // Function to shuffle an array
+  function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [array[i], array[j]] = [array[j], array[i]];
