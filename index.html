@@ -30,17 +30,21 @@
       cursor: pointer;
     }
     input[type="number"] {
-      width: calc(100% - 160px);
+      width: 100%;
       padding: 10px;
       font-size: 16px;
       margin-bottom: 10px;
       box-sizing: border-box;
-      display: inline-block;
+    }
+    .input-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     .button-container {
-      display: inline-block;
-      vertical-align: top;
-      width: 140px;
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
     }
     #question-page, #result-page, #report-page {
       display: none;
@@ -48,6 +52,11 @@
     .wrong-answer {
       color: red;
       font-weight: bold;
+    }
+    @media only screen and (max-width: 500px) {
+      input[type="number"] {
+        width: calc(100% - 40px);
+      }
     }
   </style>
 </head>
@@ -61,13 +70,13 @@
   </div>
 
   <div id="question-page">
-    <div id="input-container">
+    <div class="input-container">
       <h2 id="question"></h2>
-      <input type="number" id="answer" placeholder="Enter your answer" inputmode="numeric">
-    </div>
-    <div class="button-container">
-      <button onclick="previousQuestion()">Previous</button>
-      <button onclick="nextQuestion()">Next</button>
+      <div class="button-container">
+        <button onclick="previousQuestion()">Previous</button>
+        <input type="number" id="answer" placeholder="Enter your answer" inputmode="numeric">
+        <button onclick="nextQuestion()">Next</button>
+      </div>
       <button onclick="submitAnswer()">Submit Answer</button>
     </div>
   </div>
