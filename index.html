@@ -37,8 +37,12 @@
       margin-bottom: 10px;
       box-sizing: border-box;
     }
-    #question-page, #result-page {
+    #question-page, #result-page, #report-page {
       display: none;
+    }
+    .wrong-answer {
+      color: red;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -55,12 +59,20 @@
     <h2 id="question"></h2>
     <input type="number" id="answer" placeholder="Enter your answer" inputmode="numeric">
     <button onclick="submitAnswer()">Submit Answer</button>
+    <button onclick="previousQuestion()">Previous</button>
+    <button onclick="nextQuestion()">Next</button>
   </div>
 
   <div id="result-page">
     <h2>Your Score:</h2>
     <div id="score"></div>
     <div id="time"></div>
+    <button onclick="showReport()">View Wrong Answers</button>
+  </div>
+
+  <div id="report-page">
+    <h2>Wrong Answers:</h2>
+    <ul id="wrong-answers"></ul>
   </div>
 </div>
 
@@ -68,7 +80,7 @@
   // Define multiplication questions and answers
   const questions = [];
   for (let i = 2; i <= 9; i++) {
-    for (let j = 2; j <= 9; j++) {
+    for (let j = 1; j <= 10; j++) {
       questions.push({ question: `What is ${i} times ${j}?`, answer: i * j });
     }
   }
@@ -79,6 +91,7 @@
   let currentQuestion = 0;
   let score = 0;
   let startTime, endTime;
+  let wrongAnswers = [];
 
   function startQuiz() {
     startTime = new Date().getTime();
@@ -101,12 +114,26 @@
     if (!isNaN(userAnswer)) {
       if (userAnswer === questions[currentQuestion].answer) {
         score++;
+      } else {
+        wrongAnswers.push({ question: questions[currentQuestion].question, correctAnswer: questions[currentQuestion].answer, userAnswer: userAnswer });
       }
       currentQuestion++;
       loadQuestion();
     } else {
       alert('Please enter a valid number.');
     }
+  }
+
+  function previousQuestion() {
+    if (currentQuestion > 0) {
+      currentQuestion--;
+      loadQuestion();
+    }
+  }
+
+  function nextQuestion() {
+    currentQuestion++;
+    loadQuestion();
   }
 
   function showResult() {
@@ -118,6 +145,18 @@
     document.getElementById('result-page').style.display = 'block';
     document.getElementById('score').innerText = `Score: ${score} out of ${questions.length}`;
     document.getElementById('time').innerText = `Time taken: ${minutes} minutes ${seconds} seconds`;
+  }
+
+  function showReport() {
+    document.getElementById('result-page').style.display = 'none';
+    document.getElementById('report-page').style.display = 'block';
+    const reportList = document.getElementById('wrong-answers');
+    reportList.innerHTML = '';
+    wrongAnswers.forEach((item) => {
+      const li = document.createElement('li');
+      li.innerHTML = `<span class="wrong-answer">${item.question}</span> (Correct Answer: ${item.correctAnswer}, Your Answer: ${item.userAnswer})`;
+      reportList.appendChild(li);
+    });
   }
 
   // Function to shuffle an array
