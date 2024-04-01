@@ -71,11 +71,10 @@
 
 <div id="question-page">
     <div class="input-container">
-        <h2> id="question" </h2>
+        <h2 id="question"></h2>
         <div class="button-container">
             <button onclick="previousQuestion()">Previous</button>
-              <input type="number" id="answer" placeholder="Enter your answer" inputmode="numeric">
-
+            <input type="number" id="answer" placeholder="Enter your answer" inputmode="numeric">
             <button onclick="nextQuestion()">Next</button>
         </div>
         <button onclick="submitAnswer()">Submit Answer</button>
@@ -157,56 +156,25 @@ function submitAnswer() {
         document.getElementById('answer').setAttribute('disabled', 'disabled');
         if (userAnswer === questions[currentQuestion].answer) {
             score++;
-            document.getElementById('answer-feedback').innerText = 'Correct!';
+            document.getElementById('answer-feedback').innerHTML = '<span style="color: green;">Correct!</span>';
         } else {
-            wrongAnswers.push({ question: questions[currentQuestion].question, correctAnswer: questions[currentQuestion].answer, userAnswer: userAnswer });
-            document.getElementById('answer-feedback').innerText = `Wrong! The correct answer is ${questions[currentQuestion].answer}`;
-        }
-        currentQuestion++;
-        loadQuestion();
-    } else {
-        alert('Please enter a valid number.');
-    }
+            wrongAnswers.push({ question: questions[currentQuestion].question, correctAnswer: questions[currentQuestion].answer, userAnswer: userAnswer }); document.getElementById('answer-feedback').innerHTML = <span style="color: red;">Wrong! The correct answer is ${questions[currentQuestion].answer}</span>; } currentQuestion++; loadQuestion(); } else { alert('Please enter a valid number.'); } }function previousQuestion() { if (currentQuestion > 0) { currentQuestion--; loadQuestion(); } }function nextQuestion() { currentQuestion++; loadQuestion(); }function showResult() { endTime = new Date().getTime(); const timeTaken = (endTime - startTime) / 1000; const minutes = Math.floor(timeTaken / 60); const seconds = Math.floor(timeTaken % 60); document.getElementById('total-time').innerText = Total Time: ${minutes}m ${seconds}s;document.getElementById('score').innerText = `Your Score: ${score}/${questions.length}`;
+
+if (wrongAnswers.length > 0) {
+    const reportList = document.getElementById('wrong-answers');
+    reportList.innerHTML = '';
+    wrongAnswers.forEach((item, index) => {
+        const li = document.createElement('li');
+        li.textContent = `${item.question} - Your Answer: ${item.userAnswer}, Correct Answer: ${item.correctAnswer}`;
+        reportList.appendChild(li);
+    });
+} else {
+    document.getElementById('wrong-answers').innerHTML = '<li>No wrong answers</li>';
 }
 
-function previousQuestion() {
-    if (currentQuestion > 0) {
-        currentQuestion--;
-        loadQuestion();
-    }
-}
-
-function nextQuestion() {
-    currentQuestion++;
-    loadQuestion();
-}
-
-function showResult() {
-    endTime = new Date().getTime();
-    const timeTaken = (endTime - startTime) / 1000;
-    const minutes = Math.floor(timeTaken / 60);
-    const seconds = Math.floor(timeTaken % 60);
-    document.getElementById('total-time').innerText = `Total Time: ${minutes}m ${seconds}s`;
-
-    document.getElementById('score').innerText = `Your Score: ${score}/${questions.length}`;
-
-    if (wrongAnswers.length > 0) {
-        const reportList = document.getElementById('wrong-answers');
-        reportList.innerHTML = '';
-        wrongAnswers.forEach((item, index) => {
-            const li = document.createElement('li');
-            li.textContent = `${item.question} - Your Answer: ${item.userAnswer}, Correct Answer: ${item.correctAnswer}`;
-            reportList.appendChild(li);
-        });
-    } else {
-        document.getElementById('wrong-answers').innerHTML = '<li>No wrong answers</li>'; }
-        document.getElementById('result-page').style.display = 'block';
+document.getElementById('result-page').style.display = 'block';
 const resultTimeDiff = Math.floor((endTime - startTime) / 1000);
 document.getElementById('result-time').innerText = `Total Time: ${formatTime(resultTimeDiff)}`;
-}
-function shuffleArray(array) { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; 
-  
-} 
-} </script>
-</body>
+}function shuffleArray(array) { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } } </script></body>
 </html>
+```
