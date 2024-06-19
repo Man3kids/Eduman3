@@ -3,63 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QR Code with Light Effect</title>
+    <title>Multiplication Quiz</title>
     <style>
         body {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f0f0f0;
-            margin: 0;
+            font-family: Arial, sans-serif;
+            font-size: 32px;
+            text-align: center;
         }
-        .qr-container {
-            position: relative;
-            width: 200px;
-            height: 200px;
-        }
-        .qr-container img {
-            width: 100%;
-            height: 100%;
-            border: 5px solid green;
-            box-sizing: border-box;
-        }
-        .light {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border: 5px solid transparent;
-            box-sizing: border-box;
-            animation: moveLight 3s infinite;
-        }
-        @keyframes moveLight {
-            0% {
-                border-color: red transparent transparent transparent;
-                box-shadow: 0 0 20px red;
-            }
-            25% {
-                border-color: transparent red transparent transparent;
-                box-shadow: 0 0 20px red;
-            }
-            50% {
-                border-color: transparent transparent red transparent;
-                box-shadow: 0 0 20px red;
-            }
-            75% {
-                border-color: transparent transparent transparent red;
-                box-shadow: 0 0 20px red;
-            }
-            100% {
-                border-color: red transparent transparent transparent;
-                box-shadow: 0 0 20px red;
-            }
+        .container {
+            width: 80%;
+            max-width: 600px;
         }
     </style>
 </head>
 <body>
-    <div class="qr-container">
-        <img src="https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=SampleText&choe=UTF-8" alt="QR Code">
-        <div class="light"></div>
+    <div class="container">
+        <div id="question">Loading...</div>
     </div>
+
+    <script>
+        let questions = [];
+        let currentQuestion = 0;
+        let score = 0;
+        let wrongAnswers = [];
+
+        function generateQuestions() {
+            for (let i = 2; i <= 9; i++) {
+                for (let j = 2; j <= 9; j++) {
+                    questions.push({ a: i, b: j });
+                }
+            }
+            questions = shuffleArray(questions);
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function showQuestion() {
+            if (currentQuestion < questions.length) {
+                const questionElement = document.getElementById("question");
+                const { a, b } = questions[currentQuestion];
+                questionElement.textContent = `${a} x ${b} = ?`;
+                setTimeout(() => showAnswer(a, b), 3000);
+            } else {
+                showResult();
+            }
+        }
+
+        function showAnswer(a, b) {
+            const questionElement = document.getElementById("question");
+            const userAnswer = prompt(`${a} x ${b} = ? (Enter your answer)`);
+            const correctAnswer = a * b;
+
+            if (parseInt(userAnswer) === correctAnswer) {
+                score++;
+            } else {
+                wrongAnswers.push({ question: `${a} x ${b}`, correctAnswer: correctAnswer, userAnswer: userAnswer });
+            }
+
+            questionElement.textContent = `${a} x ${b} = ${correctAnswer}`;
+            currentQuestion++;
+            setTimeout(showQuestion, 3000);
+        }
+
+        function showResult() {
+            const questionElement = document.getElementById("question");
+            questionElement.textContent = `Quiz Finished! Your Score: ${score}/${questions.length}`;
+            let resultMessage = `Your Score: ${score}/${questions.length}\n\n`;
+            if (wrongAnswers.length > 0) {
+                resultMessage += "Wrong Answers:\n";
+                wrongAnswers.forEach(item => {
+                    resultMessage += `${item.question} = ${item.correctAnswer} (You answered: ${item.userAnswer})\n`;
+                });
+            } else {
+                resultMessage += "No wrong answers!";
+            }
+            alert(resultMessage);
+        }
+
+        generateQuestions();
+        showQuestion();
+    </script>
 </body>
 </html>
