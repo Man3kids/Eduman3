@@ -34,7 +34,7 @@
             font-size: 20px;
             margin-top: 10px;
         }
-        .next-button {
+        .next-button, .submit-button {
             margin-top: 20px;
             padding: 10px 20px;
             font-size: 18px;
@@ -55,6 +55,7 @@
         <div class="score" id="score">Score: 0/0</div>
         <div class="error" id="error"></div>
         <button class="next-button" id="nextButton" style="display: none;">Next Page</button>
+        <button class="submit-button" id="submitButton" style="display: none;">إرسال</button>
     </div>
 
     <script>
@@ -105,8 +106,10 @@
             // Show the next button if there are more questions
             if (endIndex < questions.length) {
                 document.getElementById("nextButton").style.display = "block";
+                document.getElementById("submitButton").style.display = "none";
             } else {
                 document.getElementById("nextButton").style.display = "none";
+                document.getElementById("submitButton").style.display = "block";
             }
         }
 
@@ -145,6 +148,7 @@
             quizForm.innerHTML = "<h2>انتهى الاختبار!</h2>";
             document.getElementById("score").textContent = `النتيجة النهائية: ${score}/${questions.length}`;
             document.getElementById("nextButton").style.display = "none";
+            document.getElementById("submitButton").style.display = "none";
 
             let resultMessage = `النتيجة النهائية: ${score}/${questions.length}\n\n`;
             if (wrongAnswers.length > 0) {
@@ -170,6 +174,11 @@
 
         // Add event listener for the next button
         document.getElementById("nextButton").addEventListener("click", function () {
+            checkAnswers();
+        });
+
+        // Add event listener for the submit button
+        document.getElementById("submitButton").addEventListener("click", function () {
             checkAnswers();
         });
     </script>
