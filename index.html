@@ -13,16 +13,29 @@
             font-family: Arial, sans-serif;
             font-size: 32px;
             text-align: center;
+            flex-direction: column;
         }
         .container {
             width: 80%;
             max-width: 600px;
+        }
+        .score {
+            font-size: 24px;
+            margin-top: 20px;
+            color: #333;
+        }
+        .error {
+            color: red;
+            font-size: 24px;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div id="question">Loading...</div>
+        <div class="score" id="score">Score: 0/0</div>
+        <div class="error" id="error"></div>
     </div>
 
     <script>
@@ -51,8 +64,12 @@
         function showQuestion() {
             if (currentQuestion < questions.length) {
                 const questionElement = document.getElementById("question");
+                const scoreElement = document.getElementById("score");
+                const errorElement = document.getElementById("error");
                 const { a, b } = questions[currentQuestion];
                 questionElement.textContent = `${a} x ${b} = ?`;
+                scoreElement.textContent = `Score: ${score}/${questions.length}`;
+                errorElement.textContent = ""; // Clear any previous error message
                 setTimeout(() => showAnswer(a, b), 3000);
             } else {
                 showResult();
@@ -61,6 +78,7 @@
 
         function showAnswer(a, b) {
             const questionElement = document.getElementById("question");
+            const errorElement = document.getElementById("error");
             const userAnswer = prompt(`${a} x ${b} = ? (Enter your answer)`);
             const correctAnswer = a * b;
 
@@ -68,6 +86,7 @@
                 score++;
             } else {
                 wrongAnswers.push({ question: `${a} x ${b}`, correctAnswer: correctAnswer, userAnswer: userAnswer });
+                errorElement.textContent = `خطأ! الإجابة الصحيحة هي: ${correctAnswer}`;
             }
 
             questionElement.textContent = `${a} x ${b} = ${correctAnswer}`;
@@ -77,15 +96,17 @@
 
         function showResult() {
             const questionElement = document.getElementById("question");
-            questionElement.textContent = `Quiz Finished! Your Score: ${score}/${questions.length}`;
-            let resultMessage = `Your Score: ${score}/${questions.length}\n\n`;
+            const scoreElement = document.getElementById("score");
+            questionElement.textContent = `انتهى الاختبار!`;
+            scoreElement.textContent = `النتيجة النهائية: ${score}/${questions.length}`;
+            let resultMessage = `النتيجة النهائية: ${score}/${questions.length}\n\n`;
             if (wrongAnswers.length > 0) {
-                resultMessage += "Wrong Answers:\n";
+                resultMessage += "الإجابات الخاطئة:\n";
                 wrongAnswers.forEach(item => {
-                    resultMessage += `${item.question} = ${item.correctAnswer} (You answered: ${item.userAnswer})\n`;
+                    resultMessage += `${item.question} = ${item.correctAnswer} (إجابتك: ${item.userAnswer})\n`;
                 });
             } else {
-                resultMessage += "No wrong answers!";
+                resultMessage += "لا توجد إجابات خاطئة!";
             }
             alert(resultMessage);
         }
