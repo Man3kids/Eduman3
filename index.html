@@ -9,55 +9,78 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             font-family: Arial, sans-serif;
-            font-size: 24px;
+            font-size: 18px; /* Adjusted for mobile */
             text-align: center;
             flex-direction: column;
             margin: 0;
-            padding: 0;
+            padding: 10px; /* Added padding for mobile */
+            box-sizing: border-box;
         }
         .container {
-            width: 80%;
+            width: 100%;
             max-width: 600px;
+            padding: 10px;
         }
         .question {
-            margin-bottom: 20px;
+            margin-bottom: 15px; /* Adjusted for mobile */
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-wrap: wrap; /* Allow wrapping on small screens */
         }
         .score {
-            font-size: 20px;
-            margin-top: 20px;
+            font-size: 18px; /* Adjusted for mobile */
+            margin-top: 15px;
             color: #333;
         }
         .error {
             color: red;
-            font-size: 20px;
+            font-size: 16px; /* Adjusted for mobile */
             margin-top: 10px;
         }
         .next-button, .submit-button {
-            margin-top: 20px;
+            margin-top: 15px;
             padding: 10px 20px;
-            font-size: 18px;
+            font-size: 16px; /* Adjusted for mobile */
             cursor: pointer;
         }
         input[type="number"] {
-            font-size: 20px;
+            font-size: 18px; /* Adjusted for mobile */
             padding: 5px;
-            width: 100px;
+            width: 80px; /* Adjusted for mobile */
             margin-right: 10px;
         }
         .result-icon {
             margin-left: 10px;
-            font-size: 24px;
+            font-size: 20px; /* Adjusted for mobile */
         }
         .correct {
             color: green;
         }
         .incorrect {
             color: red;
+        }
+
+        /* Media Queries for Smaller Screens */
+        @media (max-width: 480px) {
+            body {
+                font-size: 16px; /* Smaller font for very small screens */
+            }
+            .question {
+                flex-direction: column; /* Stack elements vertically on small screens */
+                align-items: flex-start;
+            }
+            input[type="number"] {
+                width: 100%; /* Full width for inputs on small screens */
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+            .result-icon {
+                margin-left: 0;
+                margin-top: 5px;
+            }
         }
     </style>
 </head>
