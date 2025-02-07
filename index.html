@@ -23,6 +23,9 @@
         }
         .question {
             margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .score {
             font-size: 20px;
@@ -44,6 +47,17 @@
             font-size: 20px;
             padding: 5px;
             width: 100px;
+            margin-right: 10px;
+        }
+        .result-icon {
+            margin-left: 10px;
+            font-size: 24px;
+        }
+        .correct {
+            color: green;
+        }
+        .incorrect {
+            color: red;
         }
     </style>
 </head>
@@ -99,6 +113,7 @@
                 questionDiv.innerHTML = `
                     <label>${a} x ${b} = </label>
                     <input type="number" id="q${i}" required>
+                    <span class="result-icon" id="result${i}"></span>
                 `;
                 quizForm.appendChild(questionDiv);
             }
@@ -122,11 +137,16 @@
                 const { a, b } = questions[i];
                 const userAnswer = parseInt(document.getElementById(`q${i}`).value);
                 const correctAnswer = a * b;
+                const resultIcon = document.getElementById(`result${i}`);
 
                 if (userAnswer === correctAnswer) {
                     score++;
+                    resultIcon.innerHTML = "✔";
+                    resultIcon.className = "result-icon correct";
                 } else {
                     wrongAnswers.push({ question: `${a} x ${b}`, correctAnswer: correctAnswer, userAnswer: userAnswer });
+                    resultIcon.innerHTML = `✖ (${correctAnswer})`;
+                    resultIcon.className = "result-icon incorrect";
                 }
             }
 
